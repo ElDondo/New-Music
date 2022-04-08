@@ -9,8 +9,10 @@ dotenv.config()
 const TOKEN = process.env.TOKEN
 
 const LOAD_SLASH = process.argv[2] == "load"
+const DEL_SLASH = process.argv[2] == "del"
+const DEL_SLASH_GLOBAL = process.argv[2] == "delglobal"
 
-const CLIENT_ID = "958739160099864616"
+const CLIENT_ID = process.env.CLIENT_ID
 const GUILD_ID = "298920673957380098"
 
 const client = new Discord.Client({
@@ -46,6 +48,30 @@ if (LOAD_SLASH) {
             process.exit(1)
         }
     })
+}
+else if (DEL_SLASH) {
+    const rest = new REST({ version: '9' }).setToken(TOKEN);
+    rest.get(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID))
+        .then(data => {
+            const promises = [];
+            for (const command of data) {
+                const deleteUrl = `${Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID)}/${command.id}`;
+                promises.push(rest.delete(deleteUrl));
+            }
+            return Promise.all(promises);
+        });
+}
+else if (DEL_SLASH_GLOBAL) {
+    const rest = new REST({ version: '9' }).setToken(TOKEN);
+    rest.get(Routes.applicationCommands(CLIENT_ID))
+        .then(data => {
+            const promises = [];
+            for (const command of data) {
+                const deleteUrl = `${Routes.applicationCommands(CLIENT_ID)}/${command.id}`;
+                promises.push(rest.delete(deleteUrl));
+            }
+            return Promise.all(promises);
+        });
 }
 else {
     client.on("ready", () => {
