@@ -7,6 +7,9 @@ const playdl = require("play-dl")
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("play")
+        .setDescription("Play songs from youtube")
+        .addStringOption((option) => option.setName("song").setDescription("the url or search keywords").setRequired(true)),
+        /* .setName("play")
         .setDescription("load songs from youtube")
         .addSubcommand((subcommand) =>
             subcommand
@@ -25,7 +28,7 @@ module.exports = {
                 .setName("search")
                 .setDescription("Searches for song based on provided keywords")
                 .addStringOption((option) => option.setName("searchterms").setDescription("the search keywords").setRequired(true))
-        ),
+        ), */
     run: async ({ client, interaction }) => {
         if (!interaction.member.voice.channel)
             return interaction.editReply("You need to be in a Voicechannel to use this command")
@@ -52,7 +55,43 @@ module.exports = {
 
         let embed = new MessageEmbed()
 
-        if (interaction.options.getSubcommand() === "song") {
+        //if (interaction.options.get() === "play") {
+        let url = interaction.options.getString("song")
+
+        if (url.includes("&list")) {
+            console.log("this is a playlist")
+            const result = await client.player.search(url, {
+                requestedBy: interaction.user,
+                searchEngine: QueryType.YOUTUBE_PLAYLIST
+            })
+            if (result.tracks.length === 0) {
+                return interaction.editReply("No results")
+            }
+
+            const playlist = result.playlist
+            await queue.addTracks(result.tracks)
+            embed
+                .setDescription(`**${result.tracks.length} songs from [${playlist.title}](${playlist.url})** has been added to the Queue`)
+                .setThumbnail(playlist.thumbnail)
+        }
+        else {
+            const result = await client.player.search(url, {
+                requestedBy: interaction.user,
+                searchEngine: QueryType.AUTO
+            })
+            if (result.tracks.length === 0) {
+                return interaction.editReply("No results")
+            }
+
+            const song = result.tracks[0]
+            await queue.addTrack(song)
+            embed
+                .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
+                .setThumbnail(song.thumbnail)
+                .setFooter({ text: `Duration: ${song.duration}` })
+        }
+        //}
+        /*if (interaction.options.getSubcommand() === "song") {
             let url = interaction.options.getString("url")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
@@ -69,7 +108,7 @@ module.exports = {
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}` })
 
-        } else if (interaction.options.getSubcommand() === "playlist") {
+        }  else if (interaction.options.getSubcommand() === "playlist") {
             let url = interaction.options.getString("url")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
@@ -100,7 +139,7 @@ module.exports = {
                 .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}` })
-        }
+        } */
         if (!queue.playing) {
             await queue.play()
         }
