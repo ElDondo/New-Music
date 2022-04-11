@@ -15,6 +15,8 @@ const DEL_SLASH_GLOBAL = process.argv[2] == "delglobal"
 const CLIENT_ID = process.env.CLIENT_ID
 const GUILD_ID = "298920673957380098"
 
+module.exports.time = "empty"
+
 const client = new Discord.Client({
     intents: [
         "GUILDS",
@@ -96,6 +98,11 @@ else {
     });
 	client.player.on("connectionError", (queue, error) => {
         console.log(`Error emitted from the connection: ${error.message}`);
+    });
+    client.player.on("trackStart", (queue, track) => {
+        const currentDate = new Date();
+        const timestamp = currentDate.getTime();
+        module.exports.time = timestamp
     });
 }
 
