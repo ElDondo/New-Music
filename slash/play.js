@@ -89,56 +89,7 @@ module.exports = {
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}` })
         }
-        //}
-        /*if (interaction.options.getSubcommand() === "song") {
-            let url = interaction.options.getString("url")
-            const result = await client.player.search(url, {
-                requestedBy: interaction.user,
-                searchEngine: QueryType.YOUTUBE_VIDEO
-            })
-            if (result.tracks.length === 0) {
-                return interaction.editReply("No results")
-            }
 
-            const song = result.tracks[0]
-            await queue.addTrack(song)
-            embed
-                .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
-                .setThumbnail(song.thumbnail)
-                .setFooter({ text: `Duration: ${song.duration}` })
-
-        }  else if (interaction.options.getSubcommand() === "playlist") {
-            let url = interaction.options.getString("url")
-            const result = await client.player.search(url, {
-                requestedBy: interaction.user,
-                searchEngine: QueryType.YOUTUBE_PLAYLIST
-            })
-            if (result.tracks.length === 0) {
-                return interaction.editReply("No results")
-            }
-
-            const playlist = result.playlist
-            await queue.addTracks(result.tracks)
-            embed
-                .setDescription(`**${result.tracks.length} songs from [${playlist.title}](${playlist.url})** has been added to the Queue`)
-                .setThumbnail(playlist.thumbnail)
-        } else if (interaction.options.getSubcommand() === "search") {
-            let url = interaction.options.getString("searchterms")
-            const result = await client.player.search(url, {
-                requestedBy: interaction.user,
-                searchEngine: QueryType.AUTO
-            })
-            if (result.tracks.length === 0) {
-                return interaction.editReply("No results")
-            }
-
-            const song = result.tracks[0]
-            await queue.addTrack(song)
-            embed
-                .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
-                .setThumbnail(song.thumbnail)
-                .setFooter({ text: `Duration: ${song.duration}` })
-        } */
         if (!queue.playing) {
             await queue.play()
         }
