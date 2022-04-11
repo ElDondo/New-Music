@@ -59,7 +59,6 @@ module.exports = {
         let url = interaction.options.getString("song")
 
         if (url.includes("&list") || url.includes("?list")) {
-            console.log("this is a playlist")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
                 searchEngine: QueryType.YOUTUBE_PLAYLIST
