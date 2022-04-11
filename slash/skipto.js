@@ -14,10 +14,9 @@ module.exports = {
         if (trackNum > queue.tracks.length){
             return await interaction.editReply("Invalid track number")
         }
-        queue.skipTo(trackNum - 1)
+        
         await interaction.editReply(`Skipped ahead to track number ${trackNum} - ${queue.tracks[trackNum-1].title}`)
-
-        console.log(queue.tracks)
+        queue.skipTo(trackNum - 1)
     }
 }
     
