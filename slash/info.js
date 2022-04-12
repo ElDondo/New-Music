@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders")
 const { MessageEmbed } = require("discord.js")
+const moment = require("moment")
 
 const index = require('../index')
 
@@ -18,29 +19,37 @@ module.exports = {
         })
         
         const currentDate = new Date();
-        const timenow = currentDate.getTime();
+        const dateStart = index.date
+        let secondsDiff = moment(currentDate).diff(moment(dateStart), 'seconds')
 
-        let timestamp = timenow - index.time
-        let h = new Date(timestamp).getHours();
-        let m = new Date(timestamp).getMinutes();
-        let s = new Date(timestamp).getSeconds();
+        let h = 0
+        let m = 0
+        let s = 0
 
-        if (isNaN(parseFloat(h))) {
-            h = 1
-            m = 0
-            s = 0
+        if (Math.floor(secondsDiff / 3600) > 0) {
+            if (Math.floor(secondsDiff / 3600 > 100)) {
+                secondsDiff = 0
+            } else {
+                h = Math.floor(secondsDiff / 3600)
+                secondsDiff = secondsDiff - (h * 3600)
+            }
         }
+        if (Math.floor(secondsDiff / 60) > 0) {
+            m = Math.floor(secondsDiff / 60)
+            secondsDiff = secondsDiff - (m * 60)
+        }
+        s = secondsDiff
 
-        h = (h<10) ? '0' + h : h;
         m = (m<10) ? '0' + m : m;
         s = (s<10) ? '0' + s : s;
-        h = h-1
 
         let duration = queue.current.duration
         let split = duration.split(':')
-        let dh = "0"
-        let dm = "0"
-        let ds = "0"
+
+        let dh = 0
+        let dm = 0
+        let ds = 0
+
         if (split.length > 2) {
             dh = split[0]
             dm = split[1]
@@ -49,33 +58,9 @@ module.exports = {
             dm = split[0]
             ds = split[1]
         }
-
-        if (dh > 0) {
-            dh = (dh<10) ? '0' + dh : dh;
+        if (dh < 10) {
+            dh = dh.substring(1)
         }
-        dm = (dm<10) ? '0' + dm : dm;
-        ds = (ds<10) ? '0' + ds : ds;
-
-        //COUNTDOWN TIMER
-        //let seconds = Number(h * 3600) + Number(m * 60) + Number(s)
-        //let dseconds = Number(dh * 3600) + Number(dm * 60) + Number(ds)
-
-        //let diff = dseconds - seconds
-        //console.log(dseconds.toString() + " - " + seconds.toString() + " = " + diff)
-
-        // let hour = Math.floor(diff / 3600)
-        // if (hour > 0) {
-        //     diff = diff - (hour * 3600)
-        // }
-        // let min = Math.floor(diff / 60)
-        // if (min > 0) {
-        //     diff = diff - (60*min)
-        // }
-        // hour = (hour<10) ? '0' + hour : hour;
-        // min = (min<10) ? '0' + min : min;
-        // diff = (diff<10) ? '0' + diff : diff;
-
-        //var output =  hour + ':' + min + ':' + diff
 
         var playTime =  h + ':' + m + ':' + s
         var dTime =  dh + ':' + dm + ':' + ds
