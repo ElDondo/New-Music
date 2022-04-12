@@ -4,7 +4,6 @@ const { REST } = require("@discordjs/rest")
 const { Routes } = require("discord-api-types/v9")
 const fs = require("fs")
 const { Player } = require("discord-player")
-const moment = require("moment")
 
 dotenv.config()
 const TOKEN = process.env.TOKEN
@@ -16,13 +15,6 @@ const DEL_SLASH_GLOBAL = process.argv[2] == "delglobal"
 const CLIENT_ID = process.env.CLIENT_ID
 const GUILD_ID = "298920673957380098"
 
-let date = new Date().toLocaleString('en-US', {
-    timeZone: 'Europe/Amsterdam'
-})
-console.log("date")
-console.log(date)
-
-module.exports.time = "empty"
 module.exports.date = 0
 
 const client = new Discord.Client({
