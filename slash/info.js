@@ -44,6 +44,7 @@ module.exports = {
         s = (s<10) ? '0' + s : s;
 
         let duration = queue.current.duration
+        console.log(duration)
         let split = duration.split(':')
 
         let dh = 0
@@ -54,12 +55,17 @@ module.exports = {
             dh = split[0]
             dm = split[1]
             ds = split[2]
+            if (dh < 10) {
+                dh = dh.substring(1)
+            }
         } else {
             dm = split[0]
             ds = split[1]
         }
-        if (dh < 10) {
-            dh = dh.substring(1)
+        if (dm < 10) {
+            if (dm.length < 2) {
+                dm = (dm<10) ? '0' + dm : dm;
+            }
         }
 
         var playTime =  h + ':' + m + ':' + s
