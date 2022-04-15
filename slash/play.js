@@ -4,31 +4,19 @@ const { QueryTpe, QueryType } = require("discord-player")
 
 const playdl = require("play-dl")
 
+const COOKIE = process.env.COOKIE
+
+playdl.setToken({
+    youtube : {
+        cookie : COOKIE
+    }
+})
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("play")
         .setDescription("Play songs from youtube")
         .addStringOption((option) => option.setName("song").setDescription("the url or search keywords").setRequired(true)),
-        /* .setName("play")
-        .setDescription("load songs from youtube")
-        .addSubcommand((subcommand) =>
-            subcommand
-                .setName("song")
-                .setDescription("Loads a single song")
-                .addStringOption((option) => option.setName("url").setDescription("the song's url").setRequired(true))
-        )
-        .addSubcommand((subcommand) =>
-            subcommand
-                .setName("playlist")
-                .setDescription("Loads a playlist of songs")
-                .addStringOption((option) => option.setName("url").setDescription("the playlist's url").setRequired(true))
-        )
-        .addSubcommand((subcommand) =>
-            subcommand
-                .setName("search")
-                .setDescription("Searches for song based on provided keywords")
-                .addStringOption((option) => option.setName("searchterms").setDescription("the search keywords").setRequired(true))
-        ), */
     run: async ({ client, interaction }) => {
         if (!interaction.member.voice.channel)
             return interaction.editReply("You need to be in a Voicechannel to use this command")
@@ -37,11 +25,7 @@ module.exports = {
 			leaveOnEnd: false,
 			leaveOnEmpty: true,
 			spotifyBridge: false,
-			ytdlOptions: {
-				filter: "audioonly",
-				highWaterMark: 1 << 30,
-				dlChunkSize: 0
-			},
+
 			async onBeforeCreateStream(track, source, _queue) {
             // only trap youtube source
 				if (source === "youtube") {
@@ -55,7 +39,6 @@ module.exports = {
 
         let embed = new MessageEmbed()
 
-        //if (interaction.options.get() === "play") {
         let url = interaction.options.getString("song")
 
         if (url.includes("&list") || url.includes("?list")) {
