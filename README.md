@@ -9,6 +9,7 @@
 ---
 
 ## cmd commands:
+
 Start bot
 
 > node index.js
@@ -24,6 +25,7 @@ Delete slash commands
 ---
 
 ## YouTube Cookies (for age restricted videos)
+
 Steps : -
 
 * Open your browser, then open dev-tools [ Option + ⌘ + J (on macOS), or Shift + CTRL + J (on Windows/Linux). ]
