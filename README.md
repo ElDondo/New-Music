@@ -36,7 +36,7 @@ Steps : -
 
 * The first request would be watch?v="Your video ID"
 
-* Now go to Request Headers image
+* Now go to Request Headers
 
 * Find cookie in request headers
 
