@@ -30,7 +30,7 @@ module.exports = {
             // only trap youtube source
 				if (source === "youtube") {
 					// track here would be youtube track
-					return (await playdl.stream(track.url, { discordPlayerCompatibility : true })).stream;
+					return (await playdl.stream(track.url, { discordPlayerCompatibility : true })).stream
 					// we must return readable stream or void (returning void means telling discord-player to look for default extractor)
 				}
 			}
